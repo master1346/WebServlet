@@ -6,7 +6,7 @@ import java.util.*;
 
 public class PostRepository {
   private final Map<Long, Post> posts = new HashMap<>();
-  private Long id;
+  private static long id = 0L;
 
   public List<Post> all() {
     return new ArrayList<>(posts.values());
@@ -17,12 +17,25 @@ public class PostRepository {
   }
 
   public synchronized Post save(Post post) {
-    long newId = id;
-    Post updatePost = post.withMewId(newId);
-    posts.put(id, post.withMewId(id));
-    return updatePost;
-  }
+   if(post.getId() == 0){
+     long newIdPost = id++;
+     posts.put(newIdPost, post.withMewId(newIdPost));
+     return post.withMewId(newIdPost);
+   }
+   if(post.getId() > id){
+       long newIdPost = id++;
+       posts.put(newIdPost, post.withMewId(newIdPost));
+       return post.withMewId(newIdPost);
+   }
+   if(post.getId() <= id){
+         long newIdPost = post.getId();
+         posts.put(newIdPost, post);
+         return post.withMewId(newIdPost);
+   }
+   return null;
+ }
 
-  public void removeById(long id) {
+  public Post removeById(long id) {
+     return posts.remove(id);
   }
 }

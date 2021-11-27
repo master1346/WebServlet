@@ -39,22 +39,20 @@ public class MainServlet extends HttpServlet {
   }
 
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     if (req.getRequestURI().equals(API_PATH)) {
       controller.save(req.getReader(), resp);
     }
-    super.doPost(req,resp);
   }
 
   @Override
-  protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+  protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     final var path = req.getRequestURI();
     if(path.matches(PATH_WITH_DIGITS)) {
       final var id = Long.parseLong(path.substring(path.lastIndexOf("/")));
       controller.removeById(id, resp);
       return;
     }
-    super.doDelete(req, resp);
   }
 }
 
